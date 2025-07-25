@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yami vs. Zoro: Clash of Swords</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Character Accents -->
+    <!-- Application Structure Plan: A "Tale of the Tape" themed single-page application. The structure is designed for direct comparison, moving from a high-level overview to detailed, interactive breakdowns. It uses a top navigation for easy access to sections: 1. Hero Introduction, 2. Fighter Profiles (parallel columns), 3. Interactive 'Tale of the Tape' Radar Chart, 4. Tabbed 'Core Abilities' section for deep dives, 5. 'Key Matchups' highlighting critical fight dynamics, and 6. a final 'Verdict'. This non-linear, topic-driven structure is more engaging and user-friendly for comparison than a simple text document, allowing users to explore the data points that interest them most. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Core stats table -> Goal: Compare -> Viz: Interactive Radar Chart -> Interaction: Buttons to toggle stat views -> Justification: Provides an immediate, powerful visual comparison of multiple attributes. Library: Chart.js/Canvas.
+        - Report Info: Detailed ability descriptions -> Goal: Organize/Inform -> Viz: Tabbed content sections -> Interaction: Click to reveal -> Justification: Manages large blocks of text, preventing user overload and encouraging exploration. Method: HTML/JS.
+        - Report Info: Key interaction analysis (Ki vs Haki, etc.) -> Goal: Analyze -> Viz: Themed "Clash" cards -> Interaction: Hover effects -> Justification: Breaks down complex conceptual arguments into digestible, thematic points. Method: HTML/Tailwind.
+        - Report Info: Character backgrounds/feats -> Goal: Inform -> Viz: Profile cards -> Interaction: None -> Justification: Provides a clean, scannable summary of each fighter's history. Method: HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .yami-accent-bg { background-color: #4C1D95; } /* Deeper Violet */
+        .yami-accent-text { color: #4C1D95; }
+        .yami-accent-border { border-color: #4C1D95; }
+        .zoro-accent-bg { background-color: #047857; } /* Deeper Emerald */
+        .zoro-accent-text { color: #047857; }
+        .zoro-accent-border { border-color: #047857; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .tab-active {
+            border-bottom-width: 2px;
+            font-weight: 600;
+        }
+        .tab-inactive {
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-900">Yami <span class="text-slate-400">vs</span> Zoro</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#profiles" class="text-gray-600 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">Fighter Profiles</a>
+                        <a href="#tape" class="text-gray-600 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">Tale of the Tape</a>
+                        <a href="#abilities" class="text-gray-600 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">Core Abilities</a>
+                        <a href="#matchups" class="text-gray-600 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">Key Matchups</a>
+                        <a href="#verdict" class="text-gray-600 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">The Verdict</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="relative text-center py-20 md:py-32 bg-white overflow-hidden">
+            <div class="absolute top-0 left-0 w-1/2 h-full yami-accent-bg opacity-5 -skew-x-12"></div>
+            <div class="absolute top-0 right-0 w-1/2 h-full zoro-accent-bg opacity-5 skew-x-12"></div>
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+                <h2 class="text-4xl md:text-6xl font-black tracking-tight text-slate-900">CLASH OF SWORDS</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600">An interactive analysis of two of shōnen's greatest second-in-commands: Yami Sukehiro, Captain of the Black Bulls, and Roronoa Zoro, First Mate of the Straw Hat Pirates.</p>
+            </div>
+        </section>
+
+        <section id="profiles" class="py-16 sm:py-24 bg-stone-100">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Fighter Profiles</h3>
+                    <p class="mt-3 max-w-2xl mx-auto text-lg text-slate-500">This section introduces our two combatants. Learn about their origins, core philosophies, and the key moments that have defined their strength and cemented their legends.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                    
+                    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md border-t-4 yami-accent-border">
+                        <h4 class="text-2xl font-bold yami-accent-text">Yami Sukehiro</h4>
+                        <p class="text-sm font-semibold text-slate-500 mb-4">The Lord of Destruction</p>
+                        <div class="space-y-4">
+                            <div>
+                                <h5 class="font-semibold text-slate-700">Profile: The Outsider's Edge</h5>
+                                <p class="text-slate-600 text-sm mt-1">Shipwrecked in the Clover Kingdom from a distant land, Yami faced intense discrimination for his foreign appearance and ominous Dark Magic. This forged a pragmatic, stoic personality. Recruited by Julius Novachrono, he rose through the ranks to become a Magic Knight Captain, founding the Black Bulls as a haven for other misfits.</p>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-slate-700">Philosophy: Surpass Your Limits</h5>
+                                <p class="text-slate-600 text-sm mt-1">Yami's core belief is that one must constantly push beyond their perceived limitations. He is a seasoned veteran who has already overcome his foundational challenges, fighting with tactical innovation and a keen battle sense rather than just raw power. His greatest strength is his adaptability and ability to invent new spells mid-battle.</p>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-slate-700">Key Feats</h5>
+                                <ul class="list-disc list-inside text-sm text-slate-600 mt-1 space-y-1">
+                                    <li>Reacted to and blocked light-speed attacks using Ki.</li>
+                                    <li>Inflicted critical damage on the high-ranking devil, Zagred.</li>
+                                    <li>Overwhelmed Dante Zogratis (80% power), a top-tier threat.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md border-t-4 zoro-accent-border">
+                        <h4 class="text-2xl font-bold zoro-accent-text">Roronoa Zoro</h4>
+                        <p class="text-sm font-semibold text-slate-500 mb-4">The Pirate Hunter</p>
+                        <div class="space-y-4">
+                            <div>
+                                <h5 class="font-semibold text-slate-700">Profile: The Way of the Warrior</h5>
+                                <p class="text-slate-600 text-sm mt-1">Driven by a childhood promise to become the World's Greatest Swordsman, Zoro's ambition is the metaphysical fuel for his power. As the first mate of the Straw Hat Pirates, his loyalty to his captain is absolute, willing to sacrifice his life and dream for Luffy's sake. His power grows as his will strengthens.</p>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-slate-700">Philosophy: Unbreakable Will</h5>
+                                <p class="text-slate-600 text-sm mt-1">Zoro's philosophy is one of pure self-discipline and endurance. He believes pain is an obstacle to be overcome by sheer force of will. His most iconic feats are acts of monstrous durability, making his ability to outlast opponents a primary weapon. His power-ups are internal awakenings of his spirit.</p>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-slate-700">Key Feats</h5>
+                                <ul class="list-disc list-inside text-sm text-slate-600 mt-1 space-y-1">
+                                    <li>Bisected a mountain-sized stone golem (Pica).</li>
+                                    <li>Inflicted a permanent scar on Kaido, the "World's Strongest Creature".</li>
+                                    <li>Defeated King, a Yonko's lead commander, by mastering Advanced Conqueror's Haki.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tape" class="py-16 sm:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Tale of the Tape</h3>
+                    <p class="mt-3 max-w-2xl mx-auto text-lg text-slate-500">Here we break down the core attributes of each fighter in a direct comparison. Use the buttons to toggle between different sets of attributes on the chart to see how they stack up in key areas of combat.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="statsChart"></canvas>
+                </div>
+                <div id="chart-controls" class="mt-8 flex justify-center flex-wrap gap-2">
+                    <button data-stats="base" class="bg-slate-200 text-slate-800 px-4 py-2 rounded-full text-sm font-semibold shadow-sm hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Core Attributes</button>
+                    <button data-stats="power" class="bg-slate-200 text-slate-800 px-4 py-2 rounded-full text-sm font-semibold shadow-sm hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Power & Defense</button>
+                    <button data-stats="sense" class="bg-slate-200 text-slate-800 px-4 py-2 rounded-full text-sm font-semibold shadow-sm hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">Senses & Tactics</button>
+                </div>
+            </div>
+        </section>
+        
+        <section id="abilities" class="py-16 sm:py-24 bg-stone-100">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Core Abilities</h3>
+                    <p class="mt-3 max-w-2xl mx-auto text-lg text-slate-500">A fighter is defined by their arsenal. This section provides a detailed look at the unique power systems each swordsman wields. Use the tabs to explore their distinct abilities and signature techniques.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                    
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <h4 class="text-2xl font-bold yami-accent-text">Yami's Arsenal</h4>
+                        </div>
+                        <div class="fighter-tabs" data-fighter="yami">
+                            <div class="border-b border-gray-200">
+                                <nav class="-mb-px flex space-x-6 px-6" aria-label="Tabs">
+                                    <button class="tab tab-active yami-accent-border yami-accent-text whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="yami-1">Dark Magic</button>
+                                    <button class="tab tab-inactive whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm" data-tab="yami-2">Ki</button>
+                                    <button class="tab tab-inactive whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm" data-tab="yami-3">Mana Zone</button>
+                                </nav>
+                            </div>
+                            <div class="p-6">
+                                <div class="tab-content" id="yami-1">
+                                    <h5 class="font-bold text-lg mb-2">Dark Magic: The Power of the Void</h5>
+                                    <p class="text-sm text-slate-600">An exceedingly rare magic that can absorb other magic and interfere with space itself. Yami channels it through his katana to compensate for its slow speed. As an Arcane Stage mage, his magic can directly affect devils and the underworld.</p>
+                                    <ul class="list-disc list-inside text-sm text-slate-600 mt-3 space-y-1">
+                                        <li><span class="font-semibold">Dimension Slash:</span> His signature move; cuts space itself, ignoring conventional durability.</li>
+                                        <li><span class="font-semibold">Black Hole:</span> Absorbs incoming spells in a defensive void.</li>
+                                        <li><span class="font-semibold">Death Thrust:</span> A hyper-condensed piercing attack to bypass spatial distortion.</li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content hidden" id="yami-2">
+                                    <h5 class="font-bold text-lg mb-2">Ki: The Sixth Sense</h5>
+                                    <p class="text-sm text-slate-600">A skill from his homeland, Ki allows Yami to sense life energy, completely separate from mana. He uses it to predict his opponent's intent, allowing him to react to attacks before they are fully executed. This is the key to his FTL reaction speed.</p>
+                                </div>
+                                <div class="tab-content hidden" id="yami-3">
+                                    <h5 class="font-bold text-lg mb-2">Mana Zone: Battlefield Mastery</h5>
+                                    <p class="text-sm text-slate-600">An advanced technique to control ambient mana, amplifying speed, perception, and spell range. Yami can generate attacks from anywhere within his zone.</p>
+                                    <ul class="list-disc list-inside text-sm text-slate-600 mt-3 space-y-1">
+                                        <li><span class="font-semibold">Black Moon:</span> An area-of-effect that negates enemy spells.</li>
+                                        <li><span class="font-semibold">Iai Slash:</span> A lethal, high-speed counter-attack trap.</li>
+                                        <li><span class="font-semibold">Equinox:</span> A Mana Zone-enhanced Dimension Slash with massive range.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <h4 class="text-2xl font-bold zoro-accent-text">Zoro's Arsenal</h4>
+                        </div>
+                        <div class="fighter-tabs" data-fighter="zoro">
+                            <div class="border-b border-gray-200">
+                                <nav class="-mb-px flex space-x-6 px-6" aria-label="Tabs">
+                                    <button class="tab tab-active zoro-accent-border zoro-accent-text whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" data-tab="zoro-1">Santoryu</button>
+                                    <button class="tab tab-inactive whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm" data-tab="zoro-2">Haki</button>
+                                </nav>
+                            </div>
+                            <div class="p-6">
+                                <div class="tab-content" id="zoro-1">
+                                    <h5 class="font-bold text-lg mb-2">Santoryu: The Way of Three Swords</h5>
+                                    <p class="text-sm text-slate-600">Zoro's signature three-sword style requires inhuman physical strength and coordination. His cutting feats are legendary, progressing from cutting steel to scarring an Emperor of the Sea. His techniques range from direct slashes to powerful ranged air projectiles.</p>
+                                    <ul class="list-disc list-inside text-sm text-slate-600 mt-3 space-y-1">
+                                        <li><span class="font-semibold">Oni Giri:</span> A foundational three-way simultaneous slash.</li>
+                                        <li><span class="font-semibold">Pound Cannon:</span> Launches compressed air projectiles.</li>
+                                        <li><span class="font-semibold">Asura:</span> A nine-sword illusion technique born from his spirit.</li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content hidden" id="zoro-2">
+                                    <h5 class="font-bold text-lg mb-2">Haki: The Embodiment of Will</h5>
+                                    <p class="text-sm text-slate-600">Zoro is proficient in all three types of Haki, a spiritual power fueled by willpower.</p>
+                                    <ul class="list-disc list-inside text-sm text-slate-600 mt-3 space-y-1">
+                                        <li><span class="font-semibold">Observation:</span> A sixth sense to predict actions.</li>
+                                        <li><span class="font-semibold">Armament:</span> Creates "invisible armor" to drastically boost offense and defense. Advanced use allows for internal destruction (Ryou).</li>
+                                        <li><span class="font-semibold">Conqueror's:</span> The rarest form, possessed by those with the qualities of a king. Advanced coating (ACoC) infuses his swords with his spirit, elevating attack potency to the highest level.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="matchups" class="py-16 sm:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Key Matchups</h3>
+                    <p class="mt-3 max-w-2xl mx-auto text-lg text-slate-500">The outcome of this duel hinges on three critical interactions. This section breaks down how their core abilities would clash, defining the fundamental dynamics of the fight and pointing towards the ultimate victor.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-stone-50 p-6 rounded-lg border border-stone-200">
+                        <h4 class="font-bold text-lg text-center">Perception Clash</h4>
+                        <p class="text-center font-semibold text-sm yami-accent-text mt-1">Ki <span class="text-slate-400">vs</span> <span class="zoro-accent-text">Observation Haki</span></p>
+                        <p class="text-sm text-slate-600 mt-3">While both grant precognition, Yami's Ki reads <span class="font-semibold">intent</span>, while Zoro's Haki predicts <span class="font-semibold">action</span>. This gives Yami a subtle edge, as he could potentially see through feints by reading Zoro's straightforward and direct intentions.</p>
+                    </div>
+                    <div class="bg-stone-50 p-6 rounded-lg border border-stone-200">
+                        <h4 class="font-bold text-lg text-center">Offense vs. Defense</h4>
+                        <p class="text-center font-semibold text-sm yami-accent-text">Dimension Slash <span class="text-slate-400">vs</span> <span class="zoro-accent-text">Haki Armor</span></p>
+                        <p class="text-sm text-slate-600 mt-3">The central conflict. Yami's attack cuts <span class="font-semibold">space</span>, ignoring durability. Zoro's Haki is a metaphysical armor. Precedent from Zoro's world (Law vs. Vergo) suggests a powerful spatial attack can bypass Haki, making this Yami's trump card and forcing Zoro to evade rather than block.</p>
+                    </div>
+                    <div class="bg-stone-50 p-6 rounded-lg border border-stone-200">
+                        <h4 class="font-bold text-lg text-center">War of Attrition</h4>
+                        <p class="text-center font-semibold text-sm yami-accent-text">Mana <span class="text-slate-400">vs</span> <span class="zoro-accent-text">Stamina</span></p>
+                        <p class="text-sm text-slate-600 mt-3">In a prolonged battle, Zoro's near-limitless stamina and monstrous durability give him an edge over Yami's finite mana reserves. However, Yami's tendency to "surpass his limits" and innovate under pressure means a long fight could also trigger a new, decisive ability.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="verdict" class="py-16 sm:py-24 bg-stone-100">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mx-auto text-center">
+                    <h3 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Final Verdict</h3>
+                    <p class="mt-4 text-lg text-slate-600">After analyzing their abilities, feats, and key interactions, a likely winner emerges. While Zoro's endurance and raw power are immense, Yami's unique toolkit provides a more reliable path to victory.</p>
+                    <div class="mt-8 bg-white p-8 rounded-lg shadow-lg border-t-4 yami-accent-border">
+                        <p class="text-sm font-bold tracking-wider uppercase text-slate-500">Winner</p>
+                        <h4 class="text-4xl font-black yami-accent-text mt-2">Yami Sukehiro</h4>
+                        <p class="mt-4 text-slate-700">The fight's outcome is decided by one critical factor: Yami's <span class="font-bold">Dark Cloaked Dimension Slash</span>. This durability-negating "hax" ability is the single most decisive weapon in the matchup. Evidence suggests it cannot be blocked by Haki, forcing Zoro into a purely evasive strategy. Yami's synergistic toolkit—Ki to predict evasions, Mana Zone to control the battlefield and attack from unexpected angles, and defensive spells like Black Moon—gives him far more tools to create an opening for his fight-ending attack. While Zoro could win a war of attrition if he dodges every single spatial slash, Yami's tactical versatility and the absolute nature of his offense give him the victory in a majority of scenarios.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>This is a fan-made analysis based on the manga series *Black Clover* by Yūki Tabata and *One Piece* by Eiichiro Oda.</p>
+            <p class="mt-1">Interactive experience created for analytical purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chartData = {
+                base: {
+                    labels: ['Physical Strength', 'Base Speed', 'Durability', 'Stamina', 'Swordsmanship'],
+                    yami: [7, 8, 7, 8, 9],
+                    zoro: [9, 9, 10, 10, 10]
+                },
+                power: {
+                    labels: ['Attack Potency', 'Destructive Capacity', 'Hax/Special Ability', 'Defensive Power', 'Range'],
+                    yami: [9, 9, 10, 7, 8],
+                    zoro: [10, 8, 7, 9, 7]
+                },
+                sense: {
+                    labels: ['Precognition', 'Battle IQ', 'Adaptability', 'Willpower', 'Leadership'],
+                    yami: [10, 9, 10, 9, 9],
+                    zoro: [8, 9, 8, 10, 7]
+                }
+            };
+
+            const chartConfig = {
+                type: 'radar',
+                data: {
+                    labels: chartData.base.labels,
+                    datasets: [{
+                        label: 'Yami Sukehiro',
+                        data: chartData.base.yami,
+                        backgroundColor: 'rgba(76, 29, 149, 0.2)',
+                        borderColor: 'rgba(76, 29, 149, 1)',
+                        pointBackgroundColor: 'rgba(76, 29, 149, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(76, 29, 149, 1)',
+                        borderWidth: 2
+                    }, {
+                        label: 'Roronoa Zoro',
+                        data: chartData.base.zoro,
+                        backgroundColor: 'rgba(4, 120, 87, 0.2)',
+                        borderColor: 'rgba(4, 120, 87, 1)',
+                        pointBackgroundColor: 'rgba(4, 120, 87, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(4, 120, 87, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { 
+                                font: { size: 12, weight: 'bold' },
+                                color: '#475569'
+                            },
+                            ticks: {
+                                backdropColor: 'rgba(255, 255, 255, 0.75)',
+                                color: '#64748b',
+                                stepSize: 2,
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: { size: 14 }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.r !== null) {
+                                        label += context.parsed.r;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            const ctx = document.getElementById('statsChart').getContext('2d');
+            const myChart = new Chart(ctx, chartConfig);
+
+            const chartControls = document.getElementById('chart-controls');
+            chartControls.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    const statsType = e.target.dataset.stats;
+                    if (chartData[statsType]) {
+                        myChart.data.labels = chartData[statsType].labels;
+                        myChart.data.datasets[0].data = chartData[statsType].yami;
+                        myChart.data.datasets[1].data = chartData[statsType].zoro;
+                        myChart.update();
+                    }
+                }
+            });
+
+            const allTabContainers = document.querySelectorAll('.fighter-tabs');
+            allTabContainers.forEach(container => {
+                const tabs = container.querySelectorAll('.tab');
+                const contents = container.querySelectorAll('.tab-content');
+                const fighter = container.dataset.fighter;
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tabs.forEach(t => {
+                            t.classList.remove('tab-active', `${fighter}-accent-border`, `${fighter}-accent-text`);
+                            t.classList.add('tab-inactive');
+                        });
+                        tab.classList.add('tab-active', `${fighter}-accent-border`, `${fighter}-accent-text`);
+                        tab.classList.remove('tab-inactive');
+
+                        contents.forEach(content => {
+                            content.classList.add('hidden');
+                        });
+                        document.getElementById(tab.dataset.tab).classList.remove('hidden');
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
